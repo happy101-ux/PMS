@@ -4,7 +4,7 @@
 
 I have successfully **organized your police management system code** and created a **comprehensive modular architecture** with reusable components. The system now features a clean, maintainable structure with proper separation of concerns and modern coding practices.
 
-## 📁 New Modular Structure
+## 📁 New Modular Structure   
 
 ```
 c:/xampp/htdocs/PMS/
