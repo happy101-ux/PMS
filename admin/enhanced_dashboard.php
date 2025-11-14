@@ -348,52 +348,156 @@ function getCaseAnalytics($pdo) {
             --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 25%, #7e22ce 50%, #9333ea 75%, #3b82f6 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 20s ease infinite;
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            animation: float 25s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(5deg); }
         }
 
         .admin-navbar {
             background: linear-gradient(135deg, #2c3e50, #34495e);
             border-bottom: 3px solid #3498db;
             box-shadow: var(--card-shadow);
+            position: relative;
+            z-index: 1000;
         }
 
         .main-content {
             padding: 20px;
             margin-top: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: var(--card-shadow);
-            border: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
         }
 
         .card-header {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             font-weight: 600;
             border: none;
-            padding: 15px 20px;
+            padding: 20px 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 15s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .stats-card {
             text-align: center;
-            padding: 20px;
+            padding: 25px 20px;
             border-left: 5px solid;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInScale 0.6s ease-out both;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .stats-card:hover::before {
+            left: 100%;
         }
 
         .stats-card.primary { border-left-color: var(--info-color); }
@@ -401,18 +505,44 @@ function getCaseAnalytics($pdo) {
         .stats-card.warning { border-left-color: var(--warning-color); }
         .stats-card.danger { border-left-color: var(--danger-color); }
 
+        .stats-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-card:nth-child(1) { animation-delay: 0.1s; }
+        .stats-card:nth-child(2) { animation-delay: 0.2s; }
+        .stats-card:nth-child(3) { animation-delay: 0.3s; }
+        .stats-card:nth-child(4) { animation-delay: 0.4s; }
+
         .stats-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: var(--primary-color);
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: countUp 1s ease-out;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .stats-label {
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             color: #7f8c8d;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
 
         .chart-container {
@@ -424,71 +554,133 @@ function getCaseAnalytics($pdo) {
         .activity-item {
             padding: 15px;
             border-bottom: 1px solid #eee;
-            transition: background-color 0.2s ease;
+            transition: all 0.3s ease;
+            animation: fadeInRow 0.5s ease-out both;
+        }
+
+        .activity-item:nth-child(1) { animation-delay: 0.1s; }
+        .activity-item:nth-child(2) { animation-delay: 0.2s; }
+        .activity-item:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInRow {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .activity-item:hover {
             background-color: #f8f9fa;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .activity-icon {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover .activity-icon {
+            transform: scale(1.1) rotate(5deg);
         }
 
         .user-workload-item {
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #dee2e6;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            transition: all 0.2s ease;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .user-workload-item:hover {
             background-color: #f8f9fa;
             border-color: #3498db;
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .progress-bar-custom {
-            height: 8px;
-            border-radius: 4px;
+            height: 10px;
+            border-radius: 5px;
             background: #e9ecef;
+            overflow: hidden;
         }
 
         .admin-sidebar {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: var(--card-shadow);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         .nav-pills .nav-link {
-            border-radius: 10px;
-            margin-bottom: 5px;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 12px 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-pills .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-pills .nav-link:hover::before {
+            left: 100%;
         }
 
         .nav-pills .nav-link:hover {
             background-color: #e3f2fd;
             color: #1976d2;
+            transform: translateX(5px);
         }
 
         .nav-pills .nav-link.active {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
 
         .alert-custom {
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 15px;
             margin-bottom: 15px;
+            backdrop-filter: blur(10px);
         }
 
         .loading-spinner {
@@ -512,27 +704,84 @@ function getCaseAnalytics($pdo) {
         }
 
         .quick-actions {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             color: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: slideInDown 0.6s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .quick-action-btn {
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            border-radius: 10px;
-            padding: 10px 15px;
-            margin: 5px;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin: 6px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .quick-action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .quick-action-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .quick-action-btn:hover {
             background: rgba(255, 255, 255, 0.3);
             color: white;
-            transform: translateY(-2px);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .quick-action-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        .quick-action-btn i {
+            margin-right: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .quick-action-btn:hover i {
+            transform: scale(1.2) rotate(10deg);
         }
 
         .loading-overlay {
@@ -541,7 +790,8 @@ function getCaseAnalytics($pdo) {
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
             z-index: 9999;
             display: flex;
             align-items: center;
@@ -554,30 +804,28 @@ function getCaseAnalytics($pdo) {
 
         .content-section.active {
             display: block;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.4s ease-in-out;
         }
 
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(20px) scale(0.95);
             }
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
             }
         }
 
-        .quick-action-btn {
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            white-space: nowrap;
+        .btn {
+            transition: all 0.3s ease;
+            border-radius: 10px;
         }
 
-        .quick-action-btn.active {
-            background: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -722,6 +970,9 @@ function getCaseAnalytics($pdo) {
         document.addEventListener('DOMContentLoaded', function() {
             // Remove any existing event listeners and initialize
             initializeDynamicNavigation();
+            animateStats();
+            addParallaxEffect();
+            addRippleEffects();
         });
 
         function initializeDynamicNavigation() {
@@ -735,6 +986,98 @@ function getCaseAnalytics($pdo) {
                 });
             });
         }
+
+        // Animate statistics numbers
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stats-number');
+            statNumbers.forEach((stat, index) => {
+                const finalValue = stat.textContent.trim().replace('%', '');
+                if (!isNaN(finalValue)) {
+                    let current = 0;
+                    const increment = finalValue / 40;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= finalValue) {
+                            stat.textContent = stat.textContent.includes('%') ? finalValue + '%' : finalValue;
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = stat.textContent.includes('%') 
+                                ? Math.floor(current) + '%' 
+                                : Math.floor(current);
+                        }
+                    }, 30);
+                }
+            });
+        }
+
+        // Add parallax effect to cards
+        function addParallaxEffect() {
+            const cards = document.querySelectorAll('.dashboard-card, .stats-card, .admin-sidebar');
+            let mouseX = 0, mouseY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth - 0.5) * 15;
+                mouseY = (e.clientY / window.innerHeight - 0.5) * 15;
+            });
+
+            function animateCards() {
+                cards.forEach((card, index) => {
+                    const speed = (index % 3 + 1) * 0.2;
+                    const x = mouseX * speed;
+                    const y = mouseY * speed;
+                    card.style.transform = `translate(${x}px, ${y}px)`;
+                });
+                requestAnimationFrame(animateCards);
+            }
+            animateCards();
+        }
+
+        // Add ripple effects
+        function addRippleEffects() {
+            function addRipple(element) {
+                element.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        border-radius: 50%;
+                        background: rgba(102, 126, 234, 0.3);
+                        transform: scale(0);
+                        animation: ripple-animation 0.6s ease-out;
+                        pointer-events: none;
+                        z-index: 1000;
+                    `;
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            }
+
+            document.querySelectorAll('.stats-card, .quick-action-btn, .dashboard-card').forEach(addRipple);
+        }
+
+        // Add CSS for ripple animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
 
         // Main content loading function
         async function loadContent(component) {
