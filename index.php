@@ -52,6 +52,17 @@ include 'config/database.php';
             z-index: 0;
         }
 
+        body::after {
+            content: '';
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"><animate attributeName="cy" values="20;80;20" dur="10s" repeatCount="indefinite"/></circle><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"><animate attributeName="cy" values="40;10;40" dur="8s" repeatCount="indefinite"/></circle><circle cx="50" cy="60" r="1" fill="rgba(255,255,255,0.1)"><animate attributeName="cy" values="60;90;60" dur="12s" repeatCount="indefinite"/></circle></svg>');
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.3;
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-30px) rotate(5deg); }
@@ -102,12 +113,40 @@ include 'config/database.php';
             font-size: 40px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             border: 2px solid rgba(255, 255, 255, 0.3);
-            animation: pulse 3s ease-in-out infinite;
+            animation: pulse 3s ease-in-out infinite, rotate 20s linear infinite;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo-icon:hover {
+            transform: scale(1.15) rotate(360deg);
+            box-shadow: 0 12px 30px rgba(255, 255, 255, 0.4);
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .header h1 {
@@ -209,16 +248,16 @@ include 'config/database.php';
             left: 100%;
         }
 
-        .btn-primary.btn-custom {
+.btn-primary.btn-custom {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
+    color: #fff;
             box-shadow: 
                 0 6px 20px rgba(102, 126, 234, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+}
 
-        .btn-primary.btn-custom:hover {
+.btn-primary.btn-custom:hover {
             background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
             transform: translateY(-3px) scale(1.02);
             box-shadow: 
@@ -268,15 +307,28 @@ include 'config/database.php';
         .feature-item:nth-child(4) { animation-delay: 0.7s; }
 
         .feature-item:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-8px) scale(1.03);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .feature-item:hover .feature-icon {
+            transform: scale(1.2) rotate(10deg);
+            animation: bounce 0.6s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1.2) rotate(10deg); }
+            50% { transform: translateY(-10px) scale(1.2) rotate(10deg); }
         }
 
         .feature-icon {
             font-size: 2rem;
             margin-bottom: 15px;
             display: block;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
 
         .feature-item h3 {
@@ -309,13 +361,37 @@ include 'config/database.php';
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px) scale(1.08) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.4);
         }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
 
         .stat-number {
             font-size: 2.5rem;
@@ -325,6 +401,20 @@ include 'config/database.php';
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 10px;
+            display: inline-block;
+            animation: countUp 1.5s ease-out;
+            position: relative;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         .stat-label {
@@ -450,7 +540,7 @@ include 'config/database.php';
         <!-- Main Content -->
         <div class="main-content">
             <!-- Welcome Card -->
-            <div class="welcome-card">
+    <div class="welcome-card">
                 <h2>Welcome to PMS</h2>
                 <p>
                     A comprehensive platform designed to streamline police operations, 
@@ -495,5 +585,87 @@ include 'config/database.php';
             <p style="margin-top: 10px; font-size: 0.85rem;">Designed for efficient law enforcement operations</p>
         </footer>
     </div>
+
+    <script>
+        // Add interactive particle effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stat numbers
+            const statNumbers = document.querySelectorAll('.stat-number');
+            statNumbers.forEach((stat, index) => {
+                setTimeout(() => {
+                    stat.style.animation = 'countUp 1s ease-out';
+                }, index * 200);
+            });
+
+            // Add parallax effect to cards
+            const cards = document.querySelectorAll('.welcome-card, .features-card, .stat-card');
+            document.addEventListener('mousemove', (e) => {
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                cards.forEach((card, index) => {
+                    const speed = (index + 1) * 0.5;
+                    const x = (mouseX - 0.5) * speed;
+                    const y = (mouseY - 0.5) * speed;
+                    card.style.transform = `translate(${x}px, ${y}px)`;
+                });
+            });
+
+            // Add click ripple effect
+            document.querySelectorAll('.stat-card, .feature-item, .btn-custom').forEach(element => {
+                element.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+
+            // Add floating animation to feature items
+            setInterval(() => {
+                document.querySelectorAll('.feature-item').forEach((item, index) => {
+                    setTimeout(() => {
+                        item.style.animation = 'floatUp 3s ease-in-out infinite';
+                    }, index * 200);
+                });
+            }, 1000);
+        });
+
+        // Add ripple effect styles
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.6);
+                transform: scale(0);
+                animation: ripple-animation 0.6s ease-out;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes floatUp {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-5px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>

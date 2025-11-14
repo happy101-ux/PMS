@@ -320,39 +320,280 @@ renderHeader('Dashboard - Police Management System', [
 .page-wrapper {
     margin-top: 76px;
     padding: 20px;
-    background-color: #f8f9fa;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     min-height: calc(100vh - 76px);
+    position: relative;
+    overflow-x: hidden;
+}
+
+.page-wrapper::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(0, 123, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.page-wrapper > .container-fluid {
+    position: relative;
+    z-index: 1;
 }
 
 .welcome-card {
     background: linear-gradient(135deg, #007bff, #0056b3);
     color: white;
+    border-radius: 15px;
+    animation: slideInDown 0.6s ease-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: rotate 15s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .stat-card {
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease-out both;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.stat-card:hover::before {
+    left: 100%;
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: translateY(-8px) scale(1.05);
+    box-shadow: 0 12px 30px rgba(0, 123, 255, 0.2);
+    border-color: rgba(0, 123, 255, 0.3);
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+.stat-card:nth-child(5) { animation-delay: 0.5s; }
+.stat-card:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.stat-icon {
+    animation: pulse 2s ease-in-out infinite;
+    display: inline-block;
+}
+
+.stat-card:hover .stat-icon {
+    animation: bounce 0.6s ease;
+    transform: scale(1.2);
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1.2); }
+    50% { transform: translateY(-10px) scale(1.2); }
+}
+
+.stat-number {
+    animation: countUp 1s ease-out;
+    display: inline-block;
+}
+
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.action-card {
+    position: relative;
+    overflow: hidden;
 }
 
 .action-card .card {
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 15px;
+    animation: fadeInScale 0.6s ease-out both;
+}
+
+.action-card:nth-child(1) .card { animation-delay: 0.1s; }
+.action-card:nth-child(2) .card { animation-delay: 0.2s; }
+.action-card:nth-child(3) .card { animation-delay: 0.3s; }
+.action-card:nth-child(4) .card { animation-delay: 0.4s; }
+.action-card:nth-child(5) .card { animation-delay: 0.5s; }
+.action-card:nth-child(6) .card { animation-delay: 0.6s; }
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 123, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    z-index: 0;
+}
+
+.action-card:hover::before {
+    width: 300px;
+    height: 300px;
 }
 
 .action-card:hover .card {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(0, 123, 255, 0.2);
+    border-color: rgba(0, 123, 255, 0.3);
 }
 
 .action-icon {
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 1;
 }
 
 .action-card:hover .action-icon {
-    transform: scale(1.1);
+    transform: scale(1.2) rotate(10deg);
+    filter: drop-shadow(0 4px 8px rgba(0, 123, 255, 0.3));
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.table-hover tbody tr {
+    transition: all 0.3s ease;
+    animation: fadeInRow 0.5s ease-out both;
+}
+
+.table-hover tbody tr:nth-child(1) { animation-delay: 0.1s; }
+.table-hover tbody tr:nth-child(2) { animation-delay: 0.2s; }
+.table-hover tbody tr:nth-child(3) { animation-delay: 0.3s; }
+.table-hover tbody tr:nth-child(4) { animation-delay: 0.4s; }
+.table-hover tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes fadeInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.table-hover tbody tr:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 123, 255, 0.05);
+}
+
+.badge {
+    animation: pulseBadge 2s ease-in-out infinite;
+}
+
+@keyframes pulseBadge {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+h5 {
+    position: relative;
+    display: inline-block;
+}
+
+h5::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #007bff, #764ba2);
+    transition: width 0.5s ease;
+    border-radius: 2px;
+}
+
+h5:hover::after {
+    width: 100%;
 }
 
 @media (max-width: 768px) {
@@ -367,6 +608,149 @@ renderHeader('Dashboard - Police Management System', [
 </style>
 
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate stat numbers on load
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach((stat, index) => {
+        const finalValue = stat.textContent.trim();
+        if (!isNaN(finalValue)) {
+            let current = 0;
+            const increment = finalValue / 30;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= finalValue) {
+                    stat.textContent = finalValue;
+                    clearInterval(timer);
+                } else {
+                    stat.textContent = Math.floor(current);
+                }
+            }, 30);
+        }
+    });
+
+    // Add parallax effect to cards
+    const cards = document.querySelectorAll('.stat-card, .action-card .card, .welcome-card');
+    let mouseX = 0, mouseY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+    });
+
+    function animateCards() {
+        cards.forEach((card, index) => {
+            const speed = (index % 3 + 1) * 0.3;
+            const x = mouseX * speed;
+            const y = mouseY * speed;
+            card.style.transform = `translate(${x}px, ${y}px)`;
+        });
+        requestAnimationFrame(animateCards);
+    }
+    animateCards();
+
+    // Add ripple effect to cards
+    function addRippleEffect(element) {
+        element.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}px;
+                top: ${y}px;
+                border-radius: 50%;
+                background: rgba(0, 123, 255, 0.3);
+                transform: scale(0);
+                animation: ripple-animation 0.6s ease-out;
+                pointer-events: none;
+                z-index: 1000;
+            `;
+            
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+    }
+
+    document.querySelectorAll('.stat-card, .action-card, .welcome-card').forEach(addRippleEffect);
+
+    // Add click handlers for action cards with animation
+    document.querySelectorAll('.action-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            if (this.href) {
+                const cardElement = this.querySelector('.card');
+                cardElement.style.transform = 'scale(0.95)';
+                cardElement.style.opacity = '0.8';
+                setTimeout(() => {
+                    cardElement.style.transform = '';
+                    cardElement.style.opacity = '';
+                }, 200);
+            }
+        });
+    });
+
+    // Add floating animation to stat cards
+    setInterval(() => {
+        document.querySelectorAll('.stat-card').forEach((card, index) => {
+            setTimeout(() => {
+                card.style.animation = 'floatCard 3s ease-in-out infinite';
+            }, index * 100);
+        });
+    }, 2000);
+
+    // Animate table rows on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInRow 0.5s ease-out';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.table-hover tbody tr').forEach(row => {
+        observer.observe(row);
+    });
+
+    // Add glow effect to badges
+    document.querySelectorAll('.badge').forEach(badge => {
+        badge.addEventListener('mouseenter', function() {
+            this.style.boxShadow = '0 0 15px rgba(0, 123, 255, 0.5)';
+        });
+        badge.addEventListener('mouseleave', function() {
+            this.style.boxShadow = '';
+        });
+    });
+});
+
+// Add CSS animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes ripple-animation {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+    
+    @keyframes floatCard {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+`;
+document.head.appendChild(style);
+
 // Auto-refresh dashboard every 5 minutes
 setInterval(function() {
     // Optional: Add AJAX refresh for real-time updates
@@ -377,17 +761,6 @@ setInterval(function() {
     //         console.log('Dashboard refreshed');
     //     });
 }, 300000); // 5 minutes
-
-// Add click handlers for action cards
-document.querySelectorAll('.action-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-        if (this.href) {
-            // Add loading state
-            this.style.opacity = '0.7';
-            this.style.pointerEvents = 'none';
-        }
-    });
-});
 </script>
 
 </body>
